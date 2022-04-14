@@ -12,13 +12,13 @@ contract FundMe {
 	// safe math library check uint256 for integer overflows
     using SafeMathChainlink for uint256;
     
-    //mapping to store which address deposit how much ETH
+    // mapping to store which address deposit how much ETH
     mapping(address => uint256) public addressToAmountFunded;
 
     // array of addresses who deposit
     address[] public funders;
 
-    //address of the owner (who deployed the contract)
+    // address of the owner (who deployed the contract)
     address public owner;
     
     AggregatorV3Interface public priceFeed;
@@ -26,7 +26,7 @@ contract FundMe {
     
     constructor(address _priceFeed) public {
 
-        //When app start set the address of _priceFeed equal to priceFeed
+        // When app start set the address of _priceFeed equal to priceFeed
         priceFeed = AggregatorV3Interface(_priceFeed);
 
         // the first person to deploy the contract is the owner
@@ -40,12 +40,12 @@ contract FundMe {
         //is the donated amount less than 50USD?
         require(getConversionRate(msg.value) >= minimumUSD, "You need to spend more ETH!");
 
-        //if not, add to mapping and funders array
+        // if not, add to mapping and funders array
         addressToAmountFunded[msg.sender] += msg.value;
         funders.push(msg.sender);
     }
     
-    //function to get the version of the chainlink pricefeed
+    // function to get the version of the chainlink pricefeed
     function getVersion() public view returns (uint256){
        
         return priceFeed.version();
@@ -78,7 +78,7 @@ contract FundMe {
     }
 
     
-    //modifier: https://medium.com/coinmonks/solidity-tutorial-all-about-modifiers-a86cf81c14cb
+    // modifier: https://medium.com/coinmonks/solidity-tutorial-all-about-modifiers-a86cf81c14cb
     modifier onlyOwner {
     	//is the message sender owner of the contract?
         require(msg.sender == owner);
