@@ -1,6 +1,6 @@
 from scripts.helpful_scripts import get_account, LOCAL_BLOCKCHAIN_ENVIRONMENTS
 from scripts.deploy import deploy_fund_me
-from brownie import network
+from brownie import network, accounts, exceptions
 import pytest
 
 
@@ -20,3 +20,7 @@ def test_can_fund_and_withdraw():
 def test_only_owner_can_withdraw():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         pytest.skip("Only for to be tested on local blockchain environment!")
+    fund_me = deploy_fund_me()
+    malicious_user = accounts.add()
+    with pytest.raises(exceptions.VirtualMachineError):
+        fund_me.withdraw({"from": malicious_user})
